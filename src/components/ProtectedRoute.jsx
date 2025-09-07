@@ -2,16 +2,20 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-// Komponen ini menerima 'children' sebagai prop. 
-// 'children' adalah komponen halaman yang ingin kita lindungi (misalnya, <DashboardPage />)
 export default function ProtectedRoute({ children }) {
   const { currentUser } = useAuth();
 
-  // Jika tidak ada pengguna yang login, arahkan (redirect) ke halaman /login
+  // 1. Jika tidak ada pengguna yang login, arahkan ke halaman /login
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
 
-  // Jika ada pengguna yang login, tampilkan halaman yang seharusnya (children)
+  // 2. Jika ada pengguna TAPI emailnya belum terverifikasi, arahkan ke halaman /verify-email
+  if (!currentUser.emailVerified) {
+    return <Navigate to="/verify-email" />;
+  }
+
+  // 3. Jika pengguna sudah login DAN emailnya sudah terverifikasi, izinkan akses
   return children;
 }
+

@@ -20,8 +20,9 @@ import DonationPage from './pages/DonationPage';
 import InstructorDashboardPage from './pages/InstructorDashboardPage';
 import AddCoursePage from './pages/AddCoursePage';
 import ManageCoursePage from './pages/ManageCoursePage';
-// 1. Impor Halaman Edit Kursus yang baru
 import EditCoursePage from './pages/EditCoursePage';
+// 1. Impor halaman verifikasi yang baru
+import VerifyEmailPage from './pages/VerifyEmailPage';
 
 export default function App() {
   return (
@@ -42,29 +43,21 @@ export default function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
+                {/* 2. Tambahkan rute untuk halaman verifikasi. 
+                    Rute ini tidak perlu ProtectedRoute yang ketat karena 
+                    pengguna yang belum terverifikasi harus bisa mengaksesnya. */}
+                <Route path="/verify-email" element={<VerifyEmailPage />} />
+
                 {/* Rute Terproteksi untuk Murid */}
                 <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
                 <Route path="/learn/:courseId" element={<ProtectedRoute><LearningPage /></ProtectedRoute>} />
                 <Route path="/donation" element={<ProtectedRoute><DonationPage /></ProtectedRoute>} />
                 
                 {/* Rute Terproteksi untuk Instruktur */}
-                <Route 
-                  path="/instructor/dashboard"
-                  element={<InstructorRoute><InstructorDashboardPage /></InstructorRoute>}
-                />
-                <Route
-                  path="/instructor/add-course"
-                  element={<InstructorRoute><AddCoursePage /></InstructorRoute>}
-                />
-                <Route
-                  path="/instructor/manage-course/:courseId"
-                  element={<InstructorRoute><ManageCoursePage /></InstructorRoute>}
-                />
-                {/* 2. Tambahkan rute dinamis baru untuk mengedit kursus */}
-                <Route
-                  path="/instructor/edit-course/:courseId"
-                  element={<InstructorRoute><EditCoursePage /></InstructorRoute>}
-                />
+                <Route path="/instructor/dashboard" element={<InstructorRoute><InstructorDashboardPage /></InstructorRoute>} />
+                <Route path="/instructor/add-course" element={<InstructorRoute><AddCoursePage /></InstructorRoute>} />
+                <Route path="/instructor/manage-course/:courseId" element={<InstructorRoute><ManageCoursePage /></InstructorRoute>} />
+                <Route path="/instructor/edit-course/:courseId" element={<InstructorRoute><EditCoursePage /></InstructorRoute>} />
               </Routes>
             </main>
             
