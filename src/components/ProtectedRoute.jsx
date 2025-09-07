@@ -10,12 +10,17 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/login" />;
   }
 
-  // 2. Jika ada pengguna TAPI emailnya belum terverifikasi, arahkan ke halaman /verify-email
+  // 2. Jika pengguna adalah seorang instruktur, izinkan akses tanpa memeriksa verifikasi email
+  if (currentUser.role === 'instructor') {
+    return children;
+  }
+
+  // 3. Jika bukan instruktur (murid), jalankan pemeriksaan verifikasi email
   if (!currentUser.emailVerified) {
     return <Navigate to="/verify-email" />;
   }
 
-  // 3. Jika pengguna sudah login DAN emailnya sudah terverifikasi, izinkan akses
+  // 4. Jika semua syarat terpenuhi (murid yang terverifikasi), izinkan akses
   return children;
 }
 

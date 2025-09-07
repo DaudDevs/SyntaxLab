@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebase';
+import { auth, db } from '../firebase'; // 1. Impor db dari firebase
+import { doc, getDoc } from 'firebase/firestore'; // 2. Impor fungsi firestore
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -19,13 +20,22 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 1. Cek properti 'emailVerified' dari objek user setelah login berhasil
-      if (user.emailVerified) {
-        // 2. Jika true (sudah diverifikasi), arahkan ke dasbor
-        navigate('/dashboard');
+      // 3. Ambil data profil pengguna dari Firestore untuk memeriksa perannya
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      // 4. Periksa apakah pengguna adalah seorang instruktur
+      if (userDocSnap.exists() && userDocSnap.data().role === 'instructor') {
+        // Jika instruktur, abaikan verifikasi dan langsung arahkan ke dasbor instruktur
+        navigate('/instructor/dashboard');
       } else {
-        // 3. Jika false (belum diverifikasi), arahkan ke halaman verifikasi
-        navigate('/verify-email');
+        // Jika bukan instruktur (murid), jalankan alur verifikasi email seperti biasa
+        await user.reload(); // Pastikan status verifikasi terbaru
+        if (auth.currentUser.emailVerified) {
+          navigate('/dashboard');
+        } else {
+          navigate('/verify-email');
+        }
       }
     } catch (err) {
       console.error("Firebase login error:", err.code);
