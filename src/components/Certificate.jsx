@@ -51,8 +51,8 @@ const Certificate = forwardRef(({ studentName, courseName }, ref) => {
       {/* Footer / Tanda Tangan */}
       <div className="flex justify-between items-end border-t border-green-500/20 pt-2 sm:pt-4">
         <div className="text-center">
-          <p className="font-bold text-sm sm:text-lg">Budi Santoso</p>
-          <p className="text-xs sm:text-sm text-gray-400">CEO, SyntaxLab</p>
+          <p className="font-bold text-sm sm:text-lg">Daud Hanafi</p>
+          <p className="text-xs sm:text-sm text-gray-400">Owner, SyntaxLab</p>
         </div>
         <div className="text-center">
           <p className="font-bold text-sm sm:text-lg">{new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
